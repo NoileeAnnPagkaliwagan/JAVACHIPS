@@ -1,20 +1,57 @@
-# Handling multiple exceptions
-def generate_receipt(self):
-    try:
-        # Simulate some code that may raise exceptions
-        id_number = int(input("Enter ID Number: "))
-        total_cost = float(input("Enter Total Cost: $"))
+# Function to handle the app functionality
+class DentalApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Dental Patient Receipt Generator")
+        self.root.geometry("400x350")
         
-        if id_number <= 0:
-            raise ValueError("ID number must be positive")
+        # UI elements (labels, entry fields, button) for user input
+        self.label_id = tk.Label(root, text="ID Number:")
+        self.label_id.pack(pady=5)
+        self.entry_id = tk.Entry(root)
+        self.entry_id.pack(pady=5)
         
-        if total_cost < 0:
-            raise ValueError("Total cost cannot be negative")
+        self.label_name = tk.Label(root, text="Name:")
+        self.label_name.pack(pady=5)
+        self.entry_name = tk.Entry(root)
+        self.entry_name.pack(pady=5)
         
-        # Further code to generate receipt
-        print(f"Receipt generated for patient {id_number}")
+        self.label_address = tk.Label(root, text="Address:")
+        self.label_address.pack(pady=5)
+        self.entry_address = tk.Entry(root)
+        self.entry_address.pack(pady=5)
+        
+        self.label_age = tk.Label(root, text="Age:")
+        self.label_age.pack(pady=5)
+        self.entry_age = tk.Entry(root)
+        self.entry_age.pack(pady=5)
+        
+        self.label_total_cost = tk.Label(root, text="Total Cost:")
+        self.label_total_cost.pack(pady=5)
+        self.entry_total_cost = tk.Entry(root)
+        self.entry_total_cost.pack(pady=5)
+        
+        # Submit Button
+        self.submit_button = tk.Button(root, text="Generate Receipt", command=self.generate_receipt)
+        self.submit_button.pack(pady=20)
     
-    except ValueError as e:
-        print(f"ValueError: {e}")  # Handle specific exception
-    except Exception as e:
-        print(f"Unexpected error: {e}")  # Handle any other unexpected exceptions
+    def generate_receipt(self):
+        try:
+            # Get user input
+            id_number = int(self.entry_id.get())
+            name = self.entry_name.get()
+            address = self.entry_address.get()
+            age = int(self.entry_age.get())
+            total_cost = float(self.entry_total_cost.get())
+
+            # Create DentalPatient instance
+            patient = DentalPatient(id_number, name, address, age, total_cost)
+
+            # Generate PDF and show success message
+            receipt_filename = patient.generate_pdf_receipt()
+            messagebox.showinfo("Success", f"Receipt generated and saved as {receipt_filename}")
+        except ValueError as e:
+            messagebox.showerror("Invalid Input", str(e))  # Handling specific ValueError
+        except Exception as e:
+            messagebox.showerror("Error", f"An unexpected error occurred: {str(e)}")  # Catch any other exceptions
+
