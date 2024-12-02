@@ -6,3 +6,5 @@ if __name__ == "__main__":
 
 explanation
 Finally, the main entry point for the Tkinter app is as follows:
+
+- This is where the Tkinter window starts, and the DentalApp object is instantiated, running the GUI.
