@@ -58,3 +58,6 @@ class Patient:
         else:
             raise ValueError("Total cost must be a positive number")
 
+exaplanation
+A class is a blueprint for creating objects, encapsulating data, and defining methods to manipulate that data. 
+In this case, the Patient class is an example of Encapsulation and Data Hiding.
