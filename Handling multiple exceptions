@@ -1,0 +1,20 @@
+# Handling multiple exceptions
+def generate_receipt(self):
+    try:
+        # Simulate some code that may raise exceptions
+        id_number = int(input("Enter ID Number: "))
+        total_cost = float(input("Enter Total Cost: $"))
+        
+        if id_number <= 0:
+            raise ValueError("ID number must be positive")
+        
+        if total_cost < 0:
+            raise ValueError("Total cost cannot be negative")
+        
+        # Further code to generate receipt
+        print(f"Receipt generated for patient {id_number}")
+    
+    except ValueError as e:
+        print(f"ValueError: {e}")  # Handle specific exception
+    except Exception as e:
+        print(f"Unexpected error: {e}")  # Handle any other unexpected exceptions
