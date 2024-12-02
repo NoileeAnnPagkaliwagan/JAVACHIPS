@@ -1,13 +1,14 @@
-# Encapsulation (Private attributes with getters and setters)
+# Class for Patient (Encapsulation and Data Hiding)
 class Patient:
     def __init__(self, id_number, name, address, age, total_cost):
-        self.__id_number = id_number  # Private attribute
-        self.__name = name            # Private attribute
-        self.__address = address      # Private attribute
-        self.__age = age              # Private attribute
-        self.__total_cost = total_cost # Private attribute
+        # Private attributes (Data Hiding)
+        self.__id_number = id_number
+        self.__name = name
+        self.__address = address
+        self.__age = age
+        self.__total_cost = total_cost
 
-    # Getters
+    # Getters for accessing private attributes
     def get_id_number(self):
         return self.__id_number
     
@@ -23,7 +24,7 @@ class Patient:
     def get_total_cost(self):
         return self.__total_cost
 
-    # Setters
+    # Setters for modifying private attributes with validation
     def set_id_number(self, id_number):
         if isinstance(id_number, int) and id_number > 0:
             self.__id_number = id_number
@@ -50,3 +51,4 @@ class Patient:
             self.__total_cost = total_cost
         else:
             raise ValueError("Total cost must be a positive number")
+
