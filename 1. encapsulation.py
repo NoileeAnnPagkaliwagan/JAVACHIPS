@@ -1,3 +1,9 @@
+import tkinter as tk
+from tkinter import messagebox
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+
+
 # Class for Patient (Encapsulation and Data Hiding)
 class Patient:
     def __init__(self, id_number, name, address, age, total_cost):
