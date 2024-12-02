@@ -1,0 +1,128 @@
+# Class definition (Basic class structure)
+class Patient:
+    def __init__(self, id_number, name, address, age, total_cost):
+        self.id_number = id_number
+        self.name = name
+        self.address = address
+        self.age = age
+        self.total_cost = total_cost
+        
+# Encapsulation (Private attributes with getters and setters)
+class Patient:
+    def __init__(self, id_number, name, address, age, total_cost):
+        self.__id_number = id_number  # Private attribute
+        self.__name = name            # Private attribute
+        self.__address = address      # Private attribute
+        self.__age = age              # Private attribute
+        self.__total_cost = total_cost # Private attribute
+
+    # Getters
+    def get_id_number(self):
+        return self.__id_number
+    
+    def get_name(self):
+        return self.__name
+    
+    def get_address(self):
+        return self.__address
+    
+    def get_age(self):
+        return self.__age
+    
+    def get_total_cost(self):
+        return self.__total_cost
+
+    # Setters
+    def set_id_number(self, id_number):
+        if isinstance(id_number, int) and id_number > 0:
+            self.__id_number = id_number
+        else:
+            raise ValueError("ID number must be a positive integer")
+    
+    def set_name(self, name):
+        if isinstance(name, str) and len(name) > 0:
+            self.__name = name
+        else:
+            raise ValueError("Name cannot be empty and must be a string")
+    
+    def set_address(self, address):
+        self.__address = address
+    
+    def set_age(self, age):
+        if isinstance(age, int) and 0 < age < 120:
+            self.__age = age
+        else:
+            raise ValueError("Age must be a positive integer between 1 and 120")
+    
+    def set_total_cost(self, total_cost):
+        if isinstance(total_cost, float) and total_cost >= 0:
+            self.__total_cost = total_cost
+        else:
+            raise ValueError("Total cost must be a positive number")
+
+# Inheritance (DentalPatient inherits from Patient)
+class DentalPatient(Patient):
+    def __init__(self, id_number, name, address, age, total_cost):
+        super().__init__(id_number, name, address, age, total_cost)  # Inherit from Patient class
+
+    # Additional method to generate PDF receipt
+    def generate_pdf_receipt(self):
+        filename = f"patient_{self.get_id_number()}_receipt.pdf"
+        # Code to generate PDF receipt (using reportlab library)
+        print(f"PDF receipt generated and saved as {filename}")
+
+# Getter for ID Number
+def get_id_number(self):
+    return self.__id_number
+
+# Setter for ID Number
+def set_id_number(self, id_number):
+    if isinstance(id_number, int) and id_number > 0:
+        self.__id_number = id_number
+    else:
+        raise ValueError("ID number must be a positive integer")
+
+# Example of private attribute (data hiding)
+self.__id_number = id_number  # Cannot be accessed directly from outside the class
+
+# Polymorphism (Method overriding)
+class DentalPatient(Patient):
+    def __init__(self, id_number, name, address, age, total_cost):
+        super().__init__(id_number, name, address, age, total_cost)
+
+    # Overriding the 'print_details' method
+    def print_details(self):
+        print(f"Name: {self.get_name()}")
+        print(f"Age: {self.get_age()}")
+        print(f"Total Cost: ${self.get_total_cost():.2f}")
+
+# Handling multiple exceptions
+def generate_receipt(self):
+    try:
+        # Simulate some code that may raise exceptions
+        id_number = int(input("Enter ID Number: "))
+        total_cost = float(input("Enter Total Cost: $"))
+        
+        if id_number <= 0:
+            raise ValueError("ID number must be positive")
+        
+        if total_cost < 0:
+            raise ValueError("Total cost cannot be negative")
+        
+        # Further code to generate receipt
+        print(f"Receipt generated for patient {id_number}")
+    
+    except ValueError as e:
+        print(f"ValueError: {e}")  # Handle specific exception
+    except Exception as e:
+        print(f"Unexpected error: {e}")  # Handle any other unexpected exceptions
+
+
+
+
+
+
+
+
+
+
