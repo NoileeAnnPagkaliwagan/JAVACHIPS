@@ -20,3 +20,7 @@ class DentalPatient(Patient):
         c.save()
         print(f"PDF receipt saved as {filename}")
         return filename
+
+explanation
+Inheritance is used to create a subclass (DentalPatient) from the base class (Patient). 
+The subclass inherits the attributes and methods of the parent class and can also add new functionality.
