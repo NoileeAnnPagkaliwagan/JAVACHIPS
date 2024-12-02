@@ -1,0 +1,2 @@
+# Example of private attribute (data hiding)
+self.__id_number = id_number  # Cannot be accessed directly from outside the class
