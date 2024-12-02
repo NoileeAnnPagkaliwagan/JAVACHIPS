@@ -1,0 +1,10 @@
+# Getter for ID Number
+def get_id_number(self):
+    return self.__id_number
+
+# Setter for ID Number
+def set_id_number(self, id_number):
+    if isinstance(id_number, int) and id_number > 0:
+        self.__id_number = id_number
+    else:
+        raise ValueError("ID number must be a positive integer")
