@@ -3,3 +3,6 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = DentalApp(root)
     root.mainloop()
+
+explanation
+Finally, the main entry point for the Tkinter app is as follows:
