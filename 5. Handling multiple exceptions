@@ -55,3 +55,6 @@ class DentalApp:
         except Exception as e:
             messagebox.showerror("Error", f"An unexpected error occurred: {str(e)}")  # Catch any other exceptions
 
+explanation
+In the generate_receipt method of the DentalApp class, multiple exceptions are handled using try-except blocks. 
+This shows how to catch and handle specific exceptions like ValueError and any other unexpected exceptions using a generic Exception.
