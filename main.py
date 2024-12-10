@@ -1,10 +1,11 @@
 import tkinter as tk
 from tkinter import messagebox
-from tkinter import ttk
+from tkinter import simpledialog
 from tkinter import filedialog
+from tkinter import ttk
+import json  #json module
 
-#class for Patient (Encapsulation and Data Hiding)
-
+# Class for Patient (Encapsulation and Data Hiding)
 class Patient:
     def __init__(self, id_number, name, address, age, total_cost):
         self.__id_number = id_number
@@ -13,7 +14,7 @@ class Patient:
         self.__age = age
         self.__total_cost = total_cost
 
-    # Getters
+    # GETTERS
     def get_id_number(self):
         return self.__id_number
     
@@ -29,7 +30,7 @@ class Patient:
     def get_total_cost(self):
         return self.__total_cost
 
-    # Setters
+    # SETTERS
     def set_id_number(self, id_number):
         if isinstance(id_number, int) and id_number > 0:
             self.__id_number = id_number
@@ -58,13 +59,11 @@ class Patient:
             raise ValueError("Total cost must be a positive number")
 
 # INHERITANCE
-
 class DentalPatient(Patient):
     def __init__(self, id_number, name, address, age, total_cost):
         super().__init__(id_number, name, address, age, total_cost)
 
 # POLYMORPHISM
-
     def display_patient_details(self):
         details = (
             f"Patient ID: {self.get_id_number()}\n"
@@ -76,139 +75,182 @@ class DentalPatient(Patient):
         return details
 
 # FUNCTION AND DESIGN
-
 class DentalApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Dental Patient Receipt")
+        self.root.geometry("800x650")  
+        self.root.configure(bg="sky blue") 
         
-
-        self.root.geometry("800x600")  # Width = 800px, Height = 600px
-        self.root.configure(bg="sky blue")  # Background color set to sky blue
-        
-        
+        # Label and entry fields
         self.label_id = tk.Label(root, text="ID Number:", font=("Helvetica", 12), bg="sky blue")
         self.label_id.grid(row=0, column=0, padx=10, pady=10, sticky="w")
-        self.entry_id = tk.Entry(root, font=("Helvetica", 12))
+        self.entry_id = tk.Entry(root, font=("Helvetica", 12), width=30)  
         self.entry_id.grid(row=0, column=1, padx=10, pady=10, sticky="w")
 
         self.label_name = tk.Label(root, text="Name:", font=("Helvetica", 12), bg="sky blue")
         self.label_name.grid(row=1, column=0, padx=10, pady=10, sticky="w")
-        self.entry_name = tk.Entry(root, font=("Helvetica", 12))
+        self.entry_name = tk.Entry(root, font=("Helvetica", 12), width=30)  
         self.entry_name.grid(row=1, column=1, padx=10, pady=10, sticky="w")
         
         self.label_address = tk.Label(root, text="Address:", font=("Helvetica", 12), bg="sky blue")
         self.label_address.grid(row=2, column=0, padx=10, pady=10, sticky="w")
-        self.entry_address = tk.Entry(root, font=("Helvetica", 12))
+        self.entry_address = tk.Entry(root, font=("Helvetica", 12), width=30)  
         self.entry_address.grid(row=2, column=1, padx=10, pady=10, sticky="w")
 
         self.label_age = tk.Label(root, text="Age:", font=("Helvetica", 12), bg="sky blue")
         self.label_age.grid(row=3, column=0, padx=10, pady=10, sticky="w")
-        self.entry_age = tk.Entry(root, font=("Helvetica", 12))
+        self.entry_age = tk.Entry(root, font=("Helvetica", 12), width=30)  
         self.entry_age.grid(row=3, column=1, padx=10, pady=10, sticky="w")
 
-        self.label_total_cost = tk.Label(root, text="Total Cost:", font=("Helvetica", 12), bg="sky blue")
-        self.label_total_cost.grid(row=4, column=0, padx=10, pady=10, sticky="w")
-        self.entry_total_cost = tk.Entry(root, font=("Helvetica", 12))
-        self.entry_total_cost.grid(row=4, column=1, padx=10, pady=10, sticky="w")
+        self.label_cost = tk.Label(root, text="Total Cost:", font=("Helvetica", 12), bg="sky blue")
+        self.label_cost.grid(row=4, column=0, padx=10, pady=10, sticky="w")
+        self.entry_cost = tk.Entry(root, font=("Helvetica", 12), width=30)  
+        self.entry_cost.grid(row=4, column=1, padx=10, pady=10, sticky="w")
 
+        # Buttons for saving, updating, and generating receipt
+        self.button_save = tk.Button(root, text="Save Patient", command=self.save_patient, font=("Helvetica", 12))
+        self.button_save.grid(row=5, column=0, columnspan=2, pady=20)
+
+        self.button_generate_receipt = tk.Button(root, text="Generate Receipt", command=self.generate_receipt, font=("Helvetica", 12))
+        self.button_generate_receipt.grid(row=5, column=2, padx=10, pady=10)  
+
+        self.button_update = tk.Button(root, text="Update Patient", command=self.update_patient, font=("Helvetica", 12))
+        self.button_update.grid(row=6, column=0, columnspan=2, pady=20)
+
+        # Table (Treeview) for displaying patient data
+        self.tree = ttk.Treeview(root, columns=("ID", "Name", "Address", "Age", "Total Cost"), show="headings", height=10)
+        self.tree.grid(row=7, column=0, columnspan=3, padx=10, pady=10)
         
-        self.submit_button = tk.Button(root, text="Generate Receipt", font=("Helvetica", 10), width=30, height=3, command=self.generate_receipt)
-        self.submit_button.grid(row=5, column=0, columnspan=2, pady=10, padx=10, sticky="nsew")
-
+        # headings and column widths
+        self.tree.heading("ID", text="ID Number")
+        self.tree.heading("Name", text="Name")
+        self.tree.heading("Address", text="Address")
+        self.tree.heading("Age", text="Age")
+        self.tree.heading("Total Cost", text="Total Cost")
         
-        self.update_button = tk.Button(root, text="Update Patient Details", font=("Helvetica", 10), width=30, height=3, command=self.update_patient)
-        self.update_button.grid(row=6, column=0, columnspan=2, pady=10, padx=10, sticky="ew")
+        self.tree.column("ID", width=80, anchor="center")
+        self.tree.column("Name", width=150)
+        self.tree.column("Address", width=200)
+        self.tree.column("Age", width=50, anchor="center")
+        self.tree.column("Total Cost", width=100, anchor="e")
 
-        # Allow rows and columns to expand
-        self.root.grid_rowconfigure(6, weight=1)
-        self.root.grid_columnconfigure(0, weight=1)
-        self.root.grid_columnconfigure(1, weight=1)
+        self.patients = []  # List patient objects
 
-        # Create Treeview for the receipt
-        self.treeview = ttk.Treeview(root, columns=("Information", "Value"), show="headings", height=10)
-        self.treeview.grid(row=0, column=2, rowspan=6, pady=10, padx=20, sticky="nsew")
-
-        # Define columns and set headings
-        self.treeview.heading("Information", text="Information", anchor="w")
-        self.treeview.heading("Value", text="Value", anchor="w")
-        
-        # Set column widths
-        self.treeview.column("Information", width=150, anchor="w")
-        self.treeview.column("Value", width=300, anchor="w")
-
-        # Set column styles
-        self.treeview.tag_configure("information", background="lightblue")
-        self.treeview.tag_configure("value", background="white")
-
-        self.current_patient = None  
-
-    def generate_receipt(self):
+    def save_patient(self):
         try:
-
-#DATA HANDLING EXCEPTION
             id_number = int(self.entry_id.get())
             name = self.entry_name.get()
             address = self.entry_address.get()
             age = int(self.entry_age.get())
-            total_cost = float(self.entry_total_cost.get())
+            total_cost = float(self.entry_cost.get())
 
-            
-            self.current_patient = DentalPatient(id_number, name, address, age, total_cost)
+            patient = DentalPatient(id_number, name, address, age, total_cost)
+            self.patients.append(patient)
 
-            # Get patient details
-            patient_details = self.current_patient.display_patient_details()
-
-            # Clear previous entries in the Treeview
-            for row in self.treeview.get_children():
-                self.treeview.delete(row)
-
-            # Insert new data into the Treeview
-            self.treeview.insert("", "end", values=("Patient ID", str(self.current_patient.get_id_number())), tags=("information", "value"))
-            self.treeview.insert("", "end", values=("Name", self.current_patient.get_name()), tags=("information", "value"))
-            self.treeview.insert("", "end", values=("Address", self.current_patient.get_address()), tags=("information", "value"))
-            self.treeview.insert("", "end", values=("Age", str(self.current_patient.get_age())), tags=("information", "value"))
-            self.treeview.insert("", "end", values=("Total Cost", f"${self.current_patient.get_total_cost():.2f}"), tags=("information", "value"))
-
-            # Open the save dialog and save to the chosen file path
-            self.save_to_file(patient_details)
+            self.save_to_json()  # the function to save data to JSON
+            self.refresh_table()  # Refresh the table to show the new data
+            messagebox.showinfo("Success", "Patient data saved successfully!")
 
         except ValueError as e:
-            messagebox.showerror("Invalid Input", str(e))
+            messagebox.showerror("Error", str(e))
 
-    def save_to_file(self, patient_details):
-        # Ask the user for a file location using file dialog
-        file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text Files", "*.txt")])
-        
-        if file_path:
-            try:
-                # Save the receipt to the file
-                with open(file_path, "w") as file:
-                    file.write(patient_details)
-                messagebox.showinfo("Receipt Generated", f"Receipt saved to {file_path}")
+    def save_to_json(self):
+        # Convert patient data to a list
+        patients_data = [
+            {
+                "id_number": patient.get_id_number(),
+                "name": patient.get_name(),
+                "address": patient.get_address(),
+                "age": patient.get_age(),
+                "total_cost": patient.get_total_cost()
+            }
+            for patient in self.patients
+        ]
 
-            except Exception as e:
-                messagebox.showerror("Error", f"Error saving file: {str(e)}")
+        # Write the data to patients.json
+        with open("patients.json", "w") as json_file:
+            json.dump(patients_data, json_file, indent=4)
 
     def update_patient(self):
-        if self.current_patient:
-            try:
-                # Get updated user input
-                self.current_patient.set_id_number(int(self.entry_id.get()))
-                self.current_patient.set_name(self.entry_name.get())
-                self.current_patient.set_address(self.entry_address.get())
-                self.current_patient.set_age(int(self.entry_age.get()))
-                self.current_patient.set_total_cost(float(self.entry_total_cost.get()))
+        try:
+            patient_id = int(self.entry_id.get())
+            patient_to_update = None
+            for patient in self.patients:
+                if patient.get_id_number() == patient_id:
+                    patient_to_update = patient
+                    break
+            
+            if patient_to_update:
+                # Ask for new values for all fields
+                new_id = simpledialog.askinteger("Update ID", "Enter new ID:", initialvalue=patient_to_update.get_id_number())
+                new_name = simpledialog.askstring("Update Name", "Enter new name:", initialvalue=patient_to_update.get_name())
+                new_address = simpledialog.askstring("Update Address", "Enter new address:", initialvalue=patient_to_update.get_address())
+                new_age = simpledialog.askinteger("Update Age", "Enter new age:", minvalue=1, maxvalue=120, initialvalue=patient_to_update.get_age())
+                new_total_cost = simpledialog.askfloat("Update Cost", "Enter new total cost:", initialvalue=patient_to_update.get_total_cost())
 
-                # Refresh the Treeview to show updated data
-                self.generate_receipt()
-                messagebox.showinfo("Patient Updated", "Patient details have been successfully updated.")
-            except ValueError as e:
-                messagebox.showerror("Invalid Input", str(e))
-        else:
-            messagebox.showwarning("No Patient", "Please generate a receipt first before updating.")
+                # Update the patient information
+                patient_to_update.set_id_number(new_id)
+                patient_to_update.set_name(new_name)
+                patient_to_update.set_address(new_address)
+                patient_to_update.set_age(new_age)
+                patient_to_update.set_total_cost(new_total_cost)
 
+                self.save_to_json()  # Update the JSON file
+                self.refresh_table()  # Refresh the table to show updated data
+                messagebox.showinfo("Success", "Patient data updated successfully!")
+            else:
+                messagebox.showerror("Error", "Patient ID not found.")
 
+        except ValueError as e:
+            messagebox.showerror("Error", str(e))
+
+    def refresh_table(self):
+        # Clear existing data in the treeview
+        for row in self.tree.get_children():
+            self.tree.delete(row)
+
+        # Add patients to the table
+        for patient in self.patients:
+            self.tree.insert("", "end", values=(
+                patient.get_id_number(),
+                patient.get_name(),
+                patient.get_address(),
+                patient.get_age(),
+                f"{patient.get_total_cost():.2f}"
+            ))
+
+    def generate_receipt(self):
+        # Get the selected patient
+        selected_item = self.tree.focus()
+        if selected_item:
+            values = self.tree.item(selected_item, "values")
+            patient_id = values[0]
+            name = values[1]
+            address = values[2]
+            age = values[3]
+            total_cost = values[4]
+
+            # Generate receipt content
+            receipt_text = (
+                f"--- Dental Patient Receipt ---\n"
+                f"Patient ID: {patient_id}\n"
+                f"Name: {name}\n"
+                f"Address: {address}\n"
+                f"Age: {age}\n"
+                f"Total Cost: {total_cost}\n"
+                f"----------------------------\n"
+                f"Thank you"
+            )
+
+            # Open file dialog to choose where to save the receipt
+            file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt")])
+            if file_path:
+                with open(file_path, "w") as file:
+                    file.write(receipt_text)
+                messagebox.showinfo("Success", f"Receipt saved at {file_path}")
+
+# Main execution
 if __name__ == "__main__":
     root = tk.Tk()
     app = DentalApp(root)
